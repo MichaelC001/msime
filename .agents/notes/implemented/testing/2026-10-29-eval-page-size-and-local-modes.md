@@ -45,7 +45,7 @@ host-api 的输入会话本来就在选项里写了同一个数，建会话、�
 
 两边各用 `--dump` 导出四份词级集的整张候选表逐例比较，候选表不同的用例全部是日期时间行被拿掉，没有一例是别的行换了位置：全键盘 4 例（`houtian`、`jinnian`、`qunian`、`shijian`，金标准名次只有 `shijian` 的世间 10 → 6 变了），九键 10 例（另有 `qiantiao` 欠条 8 → 2、`shijiao`、`shiliao`、`xingsi`、`xinji`、`yingqi`），九键截短 3 例，14 键 4 例。
 
-双拼触屏误触的词级基线（`baseline-shuangpin-touch-words.json`，5 个方案 × 4 种模式 × 4 个 σ × 2 个偏置）改动前后的报告都与提交的基线逐字节相同；整句那份（`baseline-shuangpin-touch-sentences.json`）的结果见 PR 正文。
+双拼触屏误触的词级基线（`baseline-shuangpin-touch-words.json`，5 个方案 × 4 种模式 × 4 个 σ × 2 个偏置）改动前后的报告都与提交的基线逐字节相同；整句那份（`baseline-shuangpin-touch-sentences.json`）改动后的报告也与提交的基线逐字节相同（改动前没有用旧二进制重跑）。
 
 ## Alternatives considered
 
