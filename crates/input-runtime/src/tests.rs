@@ -6695,7 +6695,7 @@ fn resizing_the_page_tells_the_engine_its_first_page_gate() {
 /// 建立 runtime 和换引擎时同样要把分页交给引擎，不靠调用方在引擎选项里另设一份。原先只有 `set_page_size` 下发：直接 `Runtime::new(engine, 9)` 的示例、测试和评测工具（`convert_eval`、`parity.rs`）分页是 9，引擎的门槛却停在 `prepare_options` 的默认 6 行，有 6 到 8 个精确同音词的输入首页和任何宿主都不一样。
 #[test]
 fn constructing_or_replacing_the_engine_tells_it_the_first_page_gate() {
-    let mut runtime = Runtime::new(Fixture::default(), 9).unwrap();
+    let runtime = Runtime::new(Fixture::default(), 9).unwrap();
     assert_eq!(runtime.engine.first_page_rows, 9);
     let mut runtime =
         Runtime::new_with_touch_layout(Fixture::default(), 7, TouchKeyboardLayout::NineKey)
