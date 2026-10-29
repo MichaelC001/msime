@@ -288,6 +288,36 @@ fn readme_names_this_version() {
         readme.contains(&format!("msime-engine {version}, ABI ")),
         "README's sample output does not print msime-engine {version}"
     );
+    // 数据包按锁定的词库发布命名（msime-engine-data-quanpin-<词库版本>），换词库时同样不能漏改。
+    let lock: serde_json::Value = serde_json::from_str(include_str!(
+        "../../../resources/desktop-dictionary.lock.json"
+    ))
+    .expect("the dictionary lock is JSON");
+    let url = lock["artifacts"][0]["url"]
+        .as_str()
+        .expect("an artifact URL");
+    let dictionary = url
+        .split("/dict-v")
+        .nth(1)
+        .and_then(|rest| rest.split('/').next())
+        .expect("the URL names a dict-v release");
+    let pack = "msime-engine-data-quanpin-";
+    let mut packs = 0;
+    for (start, _) in readme.match_indices(pack) {
+        let named = readme[start + pack.len()..]
+            .split(|c: char| !(c.is_ascii_digit() || c == '.'))
+            .next()
+            .unwrap_or_default()
+            .trim_end_matches('.');
+        if named.starts_with(|c: char| c.is_ascii_digit()) {
+            assert_eq!(
+                named, dictionary,
+                "README names {pack}{named}, the dictionary lock is dict-v{dictionary}"
+            );
+            packs += 1;
+        }
+    }
+    assert!(packs > 0, "README no longer names the data pack");
 }
 
 #[test]
