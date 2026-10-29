@@ -111,6 +111,8 @@ Linux 本地构建、隔离 D-Bus / IBus 测试和安装后的首次配置见 [L
 
 引擎代码是 MPL-2.0，可以嵌进闭源或上架 App Store 的应用；词库数据保留各自的许可证，不是 MPL：默认中文词库含 GPL-3.0 的 rime-ice 数据，n-gram 计数是 CC-BY-SA-4.0，按需另选数据。
 
+完整的介绍、各语言的接入示例和常见问题见官网的[引擎库页面](https://msime.app/engine/)。
+
 ## 输入引擎
 
 ```sh

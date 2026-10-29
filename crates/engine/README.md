@@ -2,6 +2,8 @@
 
 The input method engine of 水杉输入法 (Metasequoia IME): quanpin, shuangpin, nine-key, wubi, zhuyin, Cantonese, Japanese, Korean and more, ranked over a word lattice with typo correction and learning from what the user picks. Licensed under MPL-2.0 so that other input methods can embed it; see [License](#许可证).
 
+Overview, integration examples and FAQ: <https://msime.app/engine/> (in Chinese).
+
 水杉输入法的输入引擎：组字状态、各输入方案、词库查询、排序与学习。它是 GPL-3.0 的 C++ [metasequoiaime/msime-engine](https://github.com/metasequoiaime/msime-engine) 的 Rust 移植，移植时对照的参考提交记在 `tools/engine-golden/README.md`。
 
 ## 快速上手
