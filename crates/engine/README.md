@@ -17,7 +17,7 @@ use msime_engine::{prepare_runtime_paths, DictionaryAccess, Session, SessionOpti
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 数据目录（解开的数据包）和放学习日志、工作词库的目录，都要是绝对路径。
-    let resources = std::path::absolute("msime-engine-data-quanpin-2.0.39")?;
+    let resources = std::path::absolute("msime-engine-data-quanpin-2.0.41")?;
     let work = std::env::temp_dir().join("msime-quickstart");
 
     // 准备代次：复制工作词库、回放学习日志。数据换了就换一个 content id。

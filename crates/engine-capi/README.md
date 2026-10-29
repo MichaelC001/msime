@@ -26,12 +26,12 @@ Overview, integration examples and FAQ: <https://msime.app/engine/> (in Chinese)
 Linux、macOS 上用 pkg-config（macOS 把归档名换成 `macos-universal` 那个）：
 
 ```sh
-tar -xzf msime-engine-capi-0.1.1-linux-x86_64.tar.gz
-tar -xzf msime-engine-data-quanpin-2.0.39.tar.gz
-capi=$PWD/msime-engine-capi-0.1.1-linux-x86_64
+tar -xzf msime-engine-capi-0.1.2-linux-x86_64.tar.gz
+tar -xzf msime-engine-data-quanpin-2.0.41.tar.gz
+capi=$PWD/msime-engine-capi-0.1.2-linux-x86_64
 export PKG_CONFIG_PATH=$capi/lib/pkgconfig
 cc -o example "$capi/examples/c/example.c" $(pkg-config --cflags --libs msime-engine) -Wl,-rpath,"$capi/lib"
-./example "$PWD/msime-engine-data-quanpin-2.0.39" "$PWD/user" "$PWD/cache"
+./example "$PWD/msime-engine-data-quanpin-2.0.41" "$PWD/user" "$PWD/cache"
 ```
 
 没有 pkg-config 时直接写：`cc -o example "$capi/examples/c/example.c" -I"$capi/include" -L"$capi/lib" -lmsime_engine -Wl,-rpath,"$capi/lib"`。静态链接把 `-lmsime_engine` 换成 `"$capi/lib/libmsime_engine.a"`，再接上 `.pc` 的 `Libs.private` 列的系统库（`pkg-config --static --libs msime-engine` 打印的除 `-lmsime_engine` 以外的部分，见[构建](#构建)）。
@@ -39,12 +39,12 @@ cc -o example "$capi/examples/c/example.c" $(pkg-config --cflags --libs msime-en
 Windows 上在 x64 的 Developer Command Prompt 里：
 
 ```bat
-tar -xf msime-engine-capi-0.1.1-windows-x86_64-msvc.zip
-tar -xf msime-engine-data-quanpin-2.0.39.zip
-set CAPI=%CD%\msime-engine-capi-0.1.1-windows-x86_64-msvc
+tar -xf msime-engine-capi-0.1.2-windows-x86_64-msvc.zip
+tar -xf msime-engine-data-quanpin-2.0.41.zip
+set CAPI=%CD%\msime-engine-capi-0.1.2-windows-x86_64-msvc
 cl /nologo /MD /I "%CAPI%\include" "%CAPI%\examples\c\example.c" /link "%CAPI%\lib\msime_engine.dll.lib"
 copy "%CAPI%\bin\msime_engine.dll" .
-example.exe "%CD%\msime-engine-data-quanpin-2.0.39" "%CD%\user" "%CD%\cache"
+example.exe "%CD%\msime-engine-data-quanpin-2.0.41" "%CD%\user" "%CD%\cache"
 ```
 
 每个平台也都可以用 CMake，动态和静态链接一样写，静态库要的系统库它从 `.pc` 里读：
@@ -57,7 +57,7 @@ cmake --build build --config Release
 在 dict-v2.0.39 的数据包上，示例打出（库的版本号随发布）。「你好世界」本来就是词库里的词，学习只调它的词频，不往个人词典里加一条；在 `tests/fixture` 的最小词库上它是整句联想解出的句子，那里会读回一条个人词条：
 
 ```text
-msime-engine 0.1.1, ABI 1.1
+msime-engine 0.1.2, ABI 1.1
 preedit: ni'hao'shi'jie (revision 11, 192 candidates)
   1. 你好世界 [ni'hao'shi'jie] source 0
   2. 你好是饥饿 [ni'hao'shi'ji'e] source 8
