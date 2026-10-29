@@ -113,6 +113,8 @@ MSIME's input engine can be embedded in other input methods: word-lattice senten
 
 The engine code is MPL-2.0, so it can go into closed-source and App Store apps. The dictionary data keeps its own licences and is not MPL: the default Chinese data includes GPL-3.0 rime-ice data and CC-BY-SA-4.0 n-gram counts; choose your data accordingly.
 
+The website's [engine library page](https://msime.app/engine/) has the full introduction, integration examples for each language and an FAQ (in Chinese).
+
 ## Input engine
 
 ```sh

@@ -113,6 +113,8 @@ Linux 本機建置、隔離的 D-Bus / IBus 測試和安裝後的首次設定見
 
 引擎程式碼是 MPL-2.0，可以嵌進閉源或上架 App Store 的應用程式；詞庫資料保留各自的授權條款，不是 MPL：預設中文詞庫含 GPL-3.0 的 rime-ice 資料，n-gram 計數是 CC-BY-SA-4.0，請依需求另選資料。
 
+完整的介紹、各語言的接入範例和常見問題見官網的[引擎庫頁面](https://msime.app/zh-TW/engine/)。
+
 ## 輸入引擎
 
 ```sh
