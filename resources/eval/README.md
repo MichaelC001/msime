@@ -98,7 +98,7 @@ cargo run --release -p msime-input-runtime --example rerank_latency -- \
 
 宿主把同一个每页候选数既交给 runtime 分页，也交给引擎作首屏门槛（`first_page_rows`，首页放得下几行）：全拼据此决定整组补全词并不并进来，九键的补全折算只在首页里调序。偏好默认每页 6 个，桌面三端、Android 和鸿蒙都用它；iOS 和网页引擎每页 9 个。`convert_eval` 照宿主的做法把一个数同时交给两边（`Runtime::new` 会把页大小交给引擎）：不给这个参数时取共享偏好的出厂值（`Preferences::default().candidate_page_size`），给了就用给的值，范围 1 到 10；iOS 的数用 `--first-page-rows 9` 量。首页行数不同，top-5、top-6 会跟着变，比较时两边要用同一个值。
 
-**口径变化（2026-10-29，PR_REF）。** 在此之前不给这个参数时 runtime 分页是 9、引擎门槛停在默认的 6（`Runtime::new` 当时不把页大小交给引擎），行内日期时间和「📅日期」菜单也开着；现在两边都是出厂值 6，本地模式全关。分页不进 `convert_eval` 的任何指标（`all_candidates` 不分页，也没有云和 AI 行），引擎门槛也仍是 6，所以前后差别全部来自日期时间候选，原先这几份基线随运行的日期、星期几和钟点变化。`verify-local.sh` 的 13 份基线里只有四份变了，都是千分之一：`words` top9 0.981 → 0.982，`nine-key` top5 0.834 → 0.835、mrr 0.674 → 0.675，`fourteen-key` top9 0.937 → 0.938，`nine-key-prefix` 只有两音节分桶的 top5 0.200 → 0.201；其余逐字节不变。上文引用的九键词级 top-5 0.834（`--nine-key` 和 `--grid fourteen` 两节）按新口径是 0.835。逐例对照见[评测口径笔记](../../.agents/notes/implemented/testing/2026-10-29-eval-page-size-and-local-modes.md)。
+**口径变化（2026-10-29，#10283）。** 在此之前不给这个参数时 runtime 分页是 9、引擎门槛停在默认的 6（`Runtime::new` 当时不把页大小交给引擎），行内日期时间和「📅日期」菜单也开着；现在两边都是出厂值 6，本地模式全关。分页不进 `convert_eval` 的任何指标（`all_candidates` 不分页，也没有云和 AI 行），引擎门槛也仍是 6，所以前后差别全部来自日期时间候选，原先这几份基线随运行的日期、星期几和钟点变化。`verify-local.sh` 的 13 份基线里只有四份变了，都是千分之一：`words` top9 0.981 → 0.982，`nine-key` top5 0.834 → 0.835、mrr 0.674 → 0.675，`fourteen-key` top9 0.937 → 0.938，`nine-key-prefix` 只有两音节分桶的 top5 0.200 → 0.201；其余逐字节不变。上文引用的九键词级 top-5 0.834（`--nine-key` 和 `--grid fourteen` 两节）按新口径是 0.835。逐例对照见[评测口径笔记](../../.agents/notes/implemented/testing/2026-10-29-eval-page-size-and-local-modes.md)。
 
 ### `sentences-v2.tsv` — 310 条收割，带上文
 
