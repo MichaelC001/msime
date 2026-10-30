@@ -489,6 +489,8 @@ struct ServiceSettingsView: View {
       }
     }
     .designPage()
+    // 从键盘深链弹出的精简录音页是一个底部弹窗，高度贴合内容；推入的设置页不受影响。
+    .fittedSheet(autoStartVoice)
     .navigationTitle(autoStartVoice ? "语音输入" : kind.title)
     .navigationBarTitleDisplayMode(.inline)
     .toolbar {
