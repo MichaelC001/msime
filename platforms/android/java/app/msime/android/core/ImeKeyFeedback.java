@@ -45,6 +45,8 @@ final class ImeKeyFeedback {
     private volatile PackSounds sounds;
     private String loadingPack = "";
     private String loadingSource = "";
+    /** 每次加载用独立身份，避免同一包先后两次请求互相冒认。 */
+    private Object loadingRequest;
     /** 当前请求解析音效包时使用的状态目录；同一包 ID 换目录也必须重新加载。 */
     private String soundSource = "";
     /** 原按钮 → 键面替身，见 {@link #stageFace}。 */
@@ -136,11 +138,15 @@ final class ImeKeyFeedback {
     private void refreshPreferences() {
         JSONObject preferences = s.preferencesSnapshot == null ? null
             : s.preferencesSnapshot.optJSONObject("preferences");
-        if (preferences == preferencesSeen && s.localSettings == localSeen) return;
+        String source = sourceKey();
+        if (preferences == preferencesSeen && s.localSettings == localSeen
+                && source.equals(soundSource)) return;
         preferencesSeen = preferences;
         localSeen = s.localSettings;
-        packId = packFor(preferences);
-        soundSource = sourceKey();
+        String nextPack = packFor(preferences);
+        if (!nextPack.equals(packId) || !source.equals(soundSource)) clearLoading();
+        packId = nextPack;
+        soundSource = source;
         JSONObject plugins = preferences == null ? null : preferences.optJSONObject("plugins");
         JSONObject keySound = plugins == null ? null : plugins.optJSONObject("key_sound");
         volume = volumeFor(volumePreference(keySound == null ? null : keySound.opt("volume")));
@@ -223,14 +229,15 @@ final class ImeKeyFeedback {
     }
 
     private void load(String pack, String source) {
+        Object requestIdentity = new Object();
+        loadingRequest = requestIdentity;
         loadingPack = pack;
         loadingSource = source;
         final String body;
         try {
             body = request(pack, source);
         } catch (JSONException error) {
-            loadingPack = "";
-            loadingSource = "";
+            clearLoading();
             return;
         }
         try {
@@ -261,28 +268,31 @@ final class ImeKeyFeedback {
                 }
                 PackSounds loaded = next;
                 s.main.post(() -> {
-                    if (!pack.equals(loadingPack) || !source.equals(loadingSource)) {
+                    if (loadingRequest != requestIdentity) {
                         if (loaded != null) release(loaded);
                         return;
                     }
-                    loadingPack = "";
-                    loadingSource = "";
+                    clearLoading();
                     PackSounds previous = sounds;
                     sounds = loaded;
                     if (previous != null && previous != loaded) release(previous);
                 });
             });
         } catch (RejectedExecutionException error) {
-            loadingPack = "";
-            loadingSource = "";
+            clearLoading();
         }
     }
 
-    /** 服务销毁时调用：停掉加载线程并释放已加载的 SoundPool。还在路上的加载结果回到主线程时因 loadingPack 已清空而自行释放。 */
-    void shutdown() {
-        loader.shutdownNow();
+    private void clearLoading() {
+        loadingRequest = null;
         loadingPack = "";
         loadingSource = "";
+    }
+
+    /** 服务销毁时调用：停掉加载线程并释放已加载的 SoundPool。还在路上的加载结果回到主线程时因请求身份失效而自行释放。 */
+    void shutdown() {
+        loader.shutdownNow();
+        clearLoading();
         PackSounds loaded = sounds;
         sounds = null;
         if (loaded != null) release(loaded);
